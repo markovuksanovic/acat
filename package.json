@@ -1,0 +1,18 @@
+{
+  "name": "acat",
+  "version": "1.0.0",
+  "description": "Convert between AWS DynamoDB JSON and regular JSON.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "acat": "index.js"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^2.9.0",
+    "dynamodb-marshaler": "^2.0.0"
+  }
+}
