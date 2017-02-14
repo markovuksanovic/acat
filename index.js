@@ -28,8 +28,8 @@ function maybeCreateDir(dirName, next) {
         console.error(err);
         process.exit(err.code);
       }
-      next();
     }
+    next();
   })
 }
 
