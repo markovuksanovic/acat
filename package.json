@@ -9,7 +9,7 @@
   "bin": {
     "acat": "index.js"
   },
-  "author": "",
+  "author": "Marko Vuksanovic (markovuksanovic@gmail.com)",
   "license": "MIT",
   "dependencies": {
     "commander": "^2.9.0",
