@@ -1,6 +1,6 @@
 {
   "name": "acat",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Convert between AWS DynamoDB JSON and regular JSON.",
   "main": "index.js",
   "scripts": {
