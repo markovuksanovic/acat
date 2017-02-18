@@ -67,7 +67,7 @@ function processItems(items) {
 }
 
 let inputStreamPromise;
-if (process.stdin.isTTY) {
+if (program.args[0]) {
   inputStreamPromise = readFileContent(program.args[0])
 } else {
   inputStreamPromise = readInputStreamAsData();
