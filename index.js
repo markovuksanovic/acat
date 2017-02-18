@@ -14,8 +14,16 @@ if(!program.args.length) {
     program.help();
 }
 
-var fileContent= fs.readFileSync(program.args[0], 'utf8')
-var items = JSON.parse(fileContent);
+function readFileContent(filePath) {
+  return new Promise((resolve, reject) => {
+    fs.readFile(filePath, (err, data) => {
+      if (err) reject(err);
+      var items = JSON.parse(data);
+      resolve(items);
+    })
+  })
+}
+
 
 function maybeCreateDir(dirName, next) {
   fs.stat(dirName, (err, stats) => {
@@ -44,5 +52,10 @@ function processItems(items) {
 	  };
 }
 
-maybeCreateDir(program.dest, () => { processItems(items) });
-
+readFileContent(program.args[0])
+  .then((items) => {
+    maybeCreateDir(program.dest, () => { processItems(items) });
+  })
+  .catch((err) => {
+    console.error(err);
+  })
