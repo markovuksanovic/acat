@@ -10,7 +10,7 @@ program
     .option('-d, --dest [build]', 'Folder in which output will be placed [build]', 'build')
     .usage('[options] <file>')
     .parse(process.argv);
-if(!program.args.length) {
+if(process.stdin.isTTY && !program.args.length) {
     program.help();
 }
 
@@ -20,6 +20,20 @@ function readFileContent(filePath) {
       if (err) reject(err);
       var items = JSON.parse(data);
       resolve(items);
+    })
+  })
+}
+
+function  readInputStreamAsData() {
+  return new Promise((resolve, reject) => {
+    let inputContent = '';
+    process.stdin.resume();
+    process.stdin.setEncoding('utf8');
+    process.stdin.on('data', (data) => {
+      inputContent += data;
+    });
+    process.stdin.on('end', () => {
+      resolve(JSON.parse(inputContent));
     })
   })
 }
@@ -43,7 +57,7 @@ function maybeCreateDir(dirName, next) {
 
 function processItems(items) {
 	for (var i = 0; i < items.length; i++) {
-    fs.writeFile(`${program.dest}/${program.prefix}${i}.json`,     JSON.stringify(marshalItem(items[i])), (err) => {
+    fs.writeFile(`${program.dest}/${program.prefix}${i}.json`, JSON.stringify(marshalItem(items[i])), (err) => {
         if (err) {
           console.error(err);
           process.exit(err.code);
@@ -52,8 +66,14 @@ function processItems(items) {
 	  };
 }
 
-readFileContent(program.args[0])
-  .then((items) => {
+let inputStreamPromise;
+if (process.stdin.isTTY) {
+  inputStreamPromise = readFileContent(program.args[0])
+} else {
+  inputStreamPromise = readInputStreamAsData();
+}
+
+inputStreamPromise.then((items) => {
     maybeCreateDir(program.dest, () => { processItems(items) });
   })
   .catch((err) => {
